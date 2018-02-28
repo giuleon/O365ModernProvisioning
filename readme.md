@@ -152,5 +152,3 @@ Last but not least, there is a Microsoft Flow to implement, which basically perf
 <p align="center">
   <img width="90%" src="./images/Flow.PNG"/>
 </p>
-
-<img src="https://telemetry.sharepointpnp.com/pnp/solutions/O365.Modern.Provisioning" />
