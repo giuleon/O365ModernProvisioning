@@ -10,6 +10,17 @@
             "name": "Launch Program",
             "program": "${workspaceFolder}\\app.js",
             "cwd": "${workspaceFolder}",
+            "env":{ 
+                "MicrosoftAppId": "",
+                "MicrosoftAppPassword": "",
+                "AAD_CLIENT_ID": "",
+                "AAD_CLIENT_SECRET": "",
+                "TENANT": "",
+                "tokenEndpoint": "",
+                "RESOURCE": "",
+                "List_Id": "",
+                "AzureWebJobsStorage": ""
+            }
         }
     ]
 }
