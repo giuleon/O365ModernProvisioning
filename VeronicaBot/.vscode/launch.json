@@ -10,7 +10,7 @@
             "name": "Launch Program",
             "program": "${workspaceFolder}\\app.js",
             "cwd": "${workspaceFolder}",
-            "env":{
+            "env":{ 
                 "MicrosoftAppId": "782c982e-c71d-47a5-9361-411444da57fe",
                 "MicrosoftAppPassword": "NLmky{igH4]A$H!W",
                 "AAD_CLIENT_ID": "60a33c4a-74ac-458e-8441-4b176ec13432",
