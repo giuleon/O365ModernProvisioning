@@ -9,7 +9,18 @@
             "request": "launch",
             "name": "Launch Program",
             "program": "${workspaceFolder}\\app.js",
-            "cwd": "${workspaceFolder}"
+            "cwd": "${workspaceFolder}",
+            "env":{
+                "MicrosoftAppId": "782c982e-c71d-47a5-9361-411444da57fe",
+                "MicrosoftAppPassword": "NLmky{igH4]A$H!W",
+                "AAD_CLIENT_ID": "60a33c4a-74ac-458e-8441-4b176ec13432",
+                "AAD_CLIENT_SECRET": "uEoqy7GRR9T/dL9cU7iMzeaF//gkuu83/7/KtgfGNEg=",
+                "TENANT": "gdeluca.onmicrosoft.com",
+                "tokenEndpoint": "https://login.microsoftonline.com/07d9ed82-4619-4149-b53e-e9aa2fcdd8e6/oauth2/token",
+                "RESOURCE": "https://graph.microsoft.com",
+                "List_Id": "be785a65-92d6-43bf-8321-18a945fc7f46",
+                "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=giulbot8e6a;AccountKey=T6i6y9pIHJKQ5qiMEyJ4lPR129Gemgjkm03HGmH49IXg9eNkBl0dh/ci8MGSk0fCWDXqF0XEbPS9plJ5dn73Pw==;"
+            }
         }
     ]
 }
