@@ -59,78 +59,7 @@ bot.set('storage', tableStorage);
 
 bot.dialog('/', [
   function (session) {
-    // var usertypes = session.message.text.toLowerCase();
-
-    // if (session.privateConversationData['step'] == '') {
-    //   session.send("Hi I'm your SharePoint Bot to assist you to request a new SharePoint site or Teams, what do you want to request?");
-    //   session.beginDialog('makeYourChoice');
-    //   session.privateConversationData['step'] = '1';
-    // }
-    // else if (session.privateConversationData['step'] == '1') {
-    //   session.privateConversationData["SiteType"] = usertypes;
-    //   session.privateConversationData['step'] = '2';
-    //   session.send('What is the title of your ' + usertypes + '?');
-    // }
-    // else if (session.privateConversationData['step'] == '2') {
-    //   session.privateConversationData["Title"] = usertypes;
-    //   session.privateConversationData['step'] = '3';
-    //   session.send('Describe the reason of your request.');
-    // }
-    // else if (session.privateConversationData['step'] == '3') {
-    //   session.privateConversationData["Description"] = usertypes;
-    //   session.privateConversationData['step'] = '4';
-    //   session.send('Please insert the email of the owner.');
-    // }
-    // else if (session.privateConversationData['step'] == '4') {
-    //   session.privateConversationData["Owner"] = usertypes;
-    //   session.privateConversationData['step'] = '5';
-    //   session.send('Please insert an alias for your ' + session.privateConversationData["SiteType"] + ' without blank spaces or special characters.');
-    // }
-    // else if (session.privateConversationData['step'] == '5') {
-    //   if (session.message.text !== 'canceled' && session.message.text !== 'confirmation') {
-    //     session.privateConversationData["Alias"] = usertypes;
-    //   }
-    //   session.beginDialog('confirmation');
-    //   session.privateConversationData['step'] = "6";
-    // }
-    // else if (session.privateConversationData['step'] == '6') {
-    //   if (session.message.text == "confirmed") {
-    //     // Get an access token for the app.
-    //     auth.getAccessToken().then(function (token) {
-    //       // create a new list item
-    //       var params = {
-    //         "fields": {
-    //           "Title": session.privateConversationData['Title'],
-    //           "Status": "Requested",
-    //           "Owner": session.privateConversationData['Owner'],
-    //           "Description": session.privateConversationData['Description'],
-    //           "SiteType": session.privateConversationData['SiteType'],
-    //           "Alias": session.privateConversationData['Alias']
-    //         }
-    //       };
-
-    //       graph.postListItem(token, params)
-    //         .then(function (result) {
-    //           console.log(result);
-    //           session.send("Request submitted successfully");
-    //           session.privateConversationData['step'] = "";
-    //         }, function (error) {
-    //           console.error('>>> Error creating a list item: ' + error);
-    //         });
-    //     }, function (error) {
-    //       console.error('>>> Error getting access token: ' + error);
-    //     });
-
-    //   } else {
-    //     // reset the dialog
-    //     session.privateConversationData['step'] = "";
-    //     // restart the dialog
-    //     session.beginDialog('/');
-    //   }
-    // }
-    // else {
-
-    // }
+    session.send("Hi I'm your SharePoint Bot to assist you to request a new SharePoint site or Teams, what do you want to request?");
     session.beginDialog('makeYourChoice');
   },
   function (session, results) {
@@ -173,15 +102,24 @@ bot.dialog('/', [
           .then(function (result) {
             console.log(result);
             session.send("Request submitted successfully");
-            session.privateConversationData['step'] = "";
+            session.beginDialog('askForAnotherRequest');
           }, function (error) {
             console.error('>>> Error creating a list item: ' + error);
+            session.beginDialog('askForAnotherRequest');
           });
       }, function (error) {
         console.error('>>> Error getting access token: ' + error);
+        session.beginDialog('askForAnotherRequest');
       });
     } else {
+      session.beginDialog('askForAnotherRequest');
+    }
+  },
+  function (session, results) {
+    if (results.response === 'yes') {
       session.beginDialog('/');
+    } else {
+      session.endDialog();      
     }
   },
 ]).triggerAction({ matches: /^(show|list|restart)/i });
@@ -320,6 +258,29 @@ bot.dialog('askForConfirmation', [
         .buttons([
           builder.CardAction.imBack(session, "canceled", "Cancel"),
           builder.CardAction.imBack(session, "confirmed", "Confirm"),
+        ])
+    ]);
+    builder.Prompts.text(session, msg);
+  },
+  function name(session, results) {
+    session.endDialogWithResult({ response: results.response });
+  }
+]);
+
+// Add dialog to request a confirmation
+bot.dialog('askForAnotherRequest', [
+  function (session) {
+    var msg = new builder.Message(session);
+    msg.attachmentLayout(builder.AttachmentLayout.list)
+    msg.attachments([
+      new builder.ThumbnailCard(session)
+        .title("Request")
+        .subtitle("Do you want to submit another request?")
+        .text("Please confirm or not.")
+        // .images([builder.CardImage.create(session, '/images/sp.png')])
+        .buttons([
+          builder.CardAction.imBack(session, "no", "No"),
+          builder.CardAction.imBack(session, "yes", "Yes"),
         ])
     ]);
     builder.Prompts.text(session, msg);
