@@ -59,7 +59,10 @@ bot.set('storage', tableStorage);
 
 bot.dialog('/', [
   function (session) {
-    session.send("Hi I'm your SharePoint Bot to assist you to request a new SharePoint site or Teams, what do you want to request?");
+    if (session.privateConversationData["welcome"]) {
+      session.send("Hi I'm your SharePoint Bot to assist you to request a new SharePoint site or Teams, what do you want to request?");
+    }
+    session.privateConversationData["welcome"] = 'true';
     session.beginDialog('makeYourChoice');
   },
   function (session, results) {
@@ -119,7 +122,7 @@ bot.dialog('/', [
     if (results.response === 'yes') {
       session.beginDialog('/');
     } else {
-      session.endDialog();      
+      session.endDialog();
     }
   },
 ]).triggerAction({ matches: /^(show|list|restart)/i });
@@ -127,7 +130,9 @@ bot.dialog('/', [
 // Add dialog to return list of choices available
 bot.dialog('makeYourChoice', [
   function (session) {
-    var msg = new builder.Message(session);
+    var msg = new builder.Message(session)
+      .speak('what do you want to request?')
+      .text('what do you want to request?');
     msg.attachmentLayout(builder.AttachmentLayout.carousel)
     msg.attachments([
       new builder.ThumbnailCard(session)
@@ -165,7 +170,11 @@ bot.dialog('makeYourChoice', [
 // This dialog prompts the user for a title. 
 bot.dialog('askForTitle', [
   function (session, args) {
-    builder.Prompts.text(session, 'What is the title of your ' + session.privateConversationData["SiteType"] + '?');
+    var question = 'What is the title of your ' + session.privateConversationData["SiteType"] + '?';
+    var msg = new builder.Message(session)
+      .speak(question)
+      .text(question);
+    builder.Prompts.text(session, msg);
   },
   function (session, results) {
     session.endDialogWithResult({ response: results.response });
@@ -175,7 +184,11 @@ bot.dialog('askForTitle', [
 // This dialog prompts the reason why 
 bot.dialog('askForReason', [
   function (session, args) {
-    builder.Prompts.text(session, 'Describe the reason of your request:');
+    var question = 'Describe the reason of your request:';
+    var msg = new builder.Message(session)
+      .speak(question)
+      .text(question);
+    builder.Prompts.text(session, msg);
   },
   function (session, results) {
     session.endDialogWithResult({ response: results.response });
@@ -185,10 +198,20 @@ bot.dialog('askForReason', [
 // This dialog prompts the Owner
 bot.dialog('askForOwner', [
   function (session, args) {
+    var question = '';
+    var msg = '';
     if (args && args.reprompt) {
-      builder.Prompts.text(session, "The user doesn't exists, please insert a valid email");
+      question = 'The user doesn\'t exists, please insert a valid email';
+      msg = new builder.Message(session)
+        .speak(question)
+        .text(question);
+      builder.Prompts.text(session, msg);
     } else {
-      builder.Prompts.text(session, "Please insert the email of the owner");
+      question = 'Please insert the email of the owner:';
+      msg = new builder.Message(session)
+        .speak(question)
+        .text(question);
+      builder.Prompts.text(session, msg);
     }
   },
   function (session, results) {
@@ -212,10 +235,20 @@ bot.dialog('askForOwner', [
 // It will re-prompt the user if the input does not match a pattern for phone number.
 bot.dialog('askForAlias', [
   function (session, args) {
+    var question = '';
+    var msg = '';
     if (args && args.reprompt) {
-      builder.Prompts.text(session, 'The alias already exists please choose another one.');
+      question = 'The alias already exists please choose another one.';
+      msg = new builder.Message(session)
+        .speak(question)
+        .text(question);
+      builder.Prompts.text(session, msg);
     } else {
-      builder.Prompts.text(session, 'Please insert an alias for your ' + session.privateConversationData["SiteType"] + ' without blank spaces or special characters.');
+      question = 'Please insert an alias for your ' + session.privateConversationData["SiteType"] + ' without blank spaces or special characters.';
+      msg = new builder.Message(session)
+        .speak(question)
+        .text(question);
+      builder.Prompts.text(session, msg);
     }
   },
   function (session, results) {
@@ -242,7 +275,14 @@ bot.dialog('askForAlias', [
 // Add dialog to request a confirmation
 bot.dialog('askForConfirmation', [
   function (session) {
-    var msg = new builder.Message(session);
+    var msg = new builder.Message(session)
+      .speak(
+        "Here the summary of your request. " +
+        "Title: " + session.privateConversationData['Title'] + " " +
+        "Owner: " + session.privateConversationData['Owner'] + " " +
+        "Description: " + session.privateConversationData['Description'] + " " +
+        "SiteType: " + session.privateConversationData['SiteType'] + " " +
+        "Alias: " + session.privateConversationData['Alias']);
     msg.attachmentLayout(builder.AttachmentLayout.list)
     msg.attachments([
       new builder.ThumbnailCard(session)
@@ -270,7 +310,8 @@ bot.dialog('askForConfirmation', [
 // Add dialog to request a confirmation
 bot.dialog('askForAnotherRequest', [
   function (session) {
-    var msg = new builder.Message(session);
+    var msg = new builder.Message(session)
+      .speak("Do you want to submit another request?");
     msg.attachmentLayout(builder.AttachmentLayout.list)
     msg.attachments([
       new builder.ThumbnailCard(session)
