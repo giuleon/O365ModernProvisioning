@@ -139,7 +139,7 @@ namespace Modern.Provisioning.Async.Function
                             if (string.IsNullOrEmpty(userId) == false)
                             {
                                 string dataPost = 
-                                    "{ 'displayName': '" + siteInfo["title"].ToString() + "', 'groupTypes': ['Unified'], 'mailEnabled': true, 'mailNickname': '" + siteInfo["alias"].ToString() + "', 'securityEnabled': false, 'owners@odata.bind': ['https://graph.microsoft.com/v1.0/users/" + userId + "'], 'visibility': 'Private' }";
+                                    "{ 'displayName': '" + siteInfo["title"].ToString() + "', 'groupTypes': ['Unified'], 'mailEnabled': true, 'mailNickname': '" + siteInfo["alias"].ToString().Replace("\r\n", "").Replace(" ","") + "', 'securityEnabled': false, 'owners@odata.bind': ['https://graph.microsoft.com/v1.0/users/" + userId + "'], 'visibility': 'Private' }";
                                 groupId = Graph.createUnifiedGroup(token, dataPost);
                                 log.Info("userId: " + groupId);
                                 //Graph.addOwnerToUnifiedGroup(token, groupId, userId);
