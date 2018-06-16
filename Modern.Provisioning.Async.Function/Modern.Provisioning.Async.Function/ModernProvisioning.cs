@@ -31,7 +31,6 @@ namespace Modern.Provisioning.Async.Function
                 var kvClient = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(azureServiceTokenProvider.KeyVaultTokenCallback));
                 log.Info("KeyVaultSecret: " + Environment.GetEnvironmentVariable("KeyVaultSecret"));
                 adminPassword = (await kvClient.GetSecretAsync(Environment.GetEnvironmentVariable("KeyVaultSecret"))).Value;
-                log.Info("Secret acquired! " + adminPassword);
             }
 
             // parse query parameter
