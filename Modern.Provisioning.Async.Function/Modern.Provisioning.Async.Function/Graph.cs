@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,6 +37,16 @@ namespace Modern.Provisioning.Async.Function
             string endPoint = "https://graph.microsoft.com/v1.0/groups/";
             string contenType = "application/json";
             string responseFromServer = requestPost(token, endPoint, data, contenType);
+            GraphGroup group = JsonConvert.DeserializeObject<GraphGroup>(responseFromServer);
+
+            return group.id;
+        }
+
+        public static string createTeamFromUnifiedGroup(string token, string data, string groupId)
+        {
+            string endPoint = "https://graph.microsoft.com/v1.0/groups/" + groupId + "/team";
+            string contenType = "application/json";
+            string responseFromServer = requestPut(token, endPoint, data, contenType);
             GraphGroup group = JsonConvert.DeserializeObject<GraphGroup>(responseFromServer);
 
             return group.id;
@@ -139,6 +149,46 @@ namespace Modern.Provisioning.Async.Function
             WebRequest request = WebRequest.Create(endPoint);
             // Set the Method property of the request to POST.  
             request.Method = "POST";
+            // Create POST data and convert it to a byte array.  
+            byte[] byteArray = Encoding.UTF8.GetBytes(postData);
+            request.Headers.Add("Authorization", "Bearer " + token);
+            if (string.IsNullOrEmpty(contentType) == false)
+            {
+                // Set the ContentType property of the WebRequest.  
+                request.ContentType = contentType;
+            }
+            // Set the ContentLength property of the WebRequest.  
+            request.ContentLength = byteArray.Length;
+            // Get the request stream.  
+            Stream dataStream = request.GetRequestStream();
+            // Write the data to the request stream.  
+            dataStream.Write(byteArray, 0, byteArray.Length);
+            // Close the Stream object.  
+            dataStream.Close();
+            // Get the response.  
+            WebResponse response = request.GetResponse();
+            // Display the status.  
+            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
+            // Get the stream containing content returned by the server.  
+            dataStream = response.GetResponseStream();
+            // Open the stream using a StreamReader for easy access.  
+            StreamReader reader = new StreamReader(dataStream);
+            // Read the content.  
+            string responseFromServer = reader.ReadToEnd();
+
+            // Clean up the streams.  
+            reader.Close();
+            dataStream.Close();
+            response.Close();
+            return responseFromServer;
+        }
+
+        private static string requestPut(string token, string endPoint, string postData, string contentType = null)
+        {
+            // Create a request using a URL that can receive a post.   
+            WebRequest request = WebRequest.Create(endPoint);
+            // Set the Method property of the request to POST.  
+            request.Method = "PUT";
             // Create POST data and convert it to a byte array.  
             byte[] byteArray = Encoding.UTF8.GetBytes(postData);
             request.Headers.Add("Authorization", "Bearer " + token);
