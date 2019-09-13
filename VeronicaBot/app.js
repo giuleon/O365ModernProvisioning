@@ -139,7 +139,7 @@ bot.dialog('makeYourChoice', [
         .title("SharePoint Site")
         .subtitle("A SharePoint team site connects you and your team to the content, information, and apps you rely on every day.")
         .text("Create a SharePoint Onlineteam site to provide a location where you and your team can work on projects and share information.")
-        .images([builder.CardImage.create(session, 'https://pbs.twimg.com/profile_images/920356547015749632/2in54ehS_400x400.jpg')])
+        .images([builder.CardImage.create(session, 'https://pbs.twimg.com/profile_images/1097195102303207424/pDetc4fK_200x200.png')])
         .buttons([
           builder.CardAction.imBack(session, "TeamSite", "Confirm")
         ]),
@@ -147,7 +147,7 @@ bot.dialog('makeYourChoice', [
         .title("SharePoint Site")
         .subtitle("SharePoint communication sites are a great way to share information with others in a visually compelling format.")
         .text("With a communication site, typically only a small set of members contribute content that is consumed by a much larger audience.")
-        .images([builder.CardImage.create(session, 'https://pbs.twimg.com/profile_images/920356547015749632/2in54ehS_400x400.jpg')])
+        .images([builder.CardImage.create(session, 'https://pbs.twimg.com/profile_images/1097195102303207424/pDetc4fK_200x200.png')])
         .buttons([
           builder.CardAction.imBack(session, "CommunicationSite", "Confirm")
         ]),
@@ -155,7 +155,7 @@ bot.dialog('makeYourChoice', [
         .title("Microsoft Teams")
         .subtitle("Microsoft Teams is the hub for teamwork in Office 365 that integrates all the people, content, and tools your team needs to be more engaged and effective.")
         .text("Work closer with your team by using chat, meeting, conference call, documents.")
-        .images([builder.CardImage.create(session, 'https://pbs.twimg.com/profile_images/873316258980036608/QXYh4F8U_400x400.jpg')])
+        .images([builder.CardImage.create(session, 'https://pbs.twimg.com/profile_images/1128330992328921090/nVNqd5QP_200x200.png')])
         .buttons([
           builder.CardAction.imBack(session, "Teams", "Confirm")
         ])
