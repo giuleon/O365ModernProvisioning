@@ -140,7 +140,11 @@ namespace Modern.Provisioning.Async.Function
                                 string dataPost = 
                                     "{ 'displayName': '" + siteInfo["title"].ToString() + "', 'groupTypes': ['Unified'], 'mailEnabled': true, 'mailNickname': '" + siteInfo["alias"].ToString().Replace("\r\n", "").Replace(" ","") + "', 'securityEnabled': false, 'owners@odata.bind': ['https://graph.microsoft.com/v1.0/users/" + userId + "'], 'visibility': 'Private' }";
                                 groupId = Graph.createUnifiedGroup(token, dataPost);
-                                log.Info("userId: " + groupId);
+                                log.Info("groupId: " + groupId);
+                                log.Info("Creating team......");
+                                string teamData = "{ \"memberSettings\": { \"allowCreateUpdateChannels\": true }, \"messagingSettings\": { \"allowUserEditMessages\": true, \"allowUserDeleteMessages\": true }, \"funSettings\": { \"allowGiphy\": true, \"giphyContentRating\": \"strict\" } }";
+                                string team = Graph.createTeamFromUnifiedGroup(token, teamData, groupId);
+                                log.Info("team: " + team);
                                 //Graph.addOwnerToUnifiedGroup(token, groupId, userId);
                                 //removeOwnerToUnifiedGroup(token, groupId, userId);
                             }
